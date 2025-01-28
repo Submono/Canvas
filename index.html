@@ -49,24 +49,21 @@
                                 dropdown.appendChild(opt);
                             });
 
-                            // Handle selection and removal
+                            // Handle selection and deselection
                             dropdown.addEventListener('change', () => {
-                                const currentValue = dropdown.value;
                                 const selects = Array.from(table.querySelectorAll('select'));
+                                const selectedValues = selects.map(select => select.value).filter(value => value !== "");
+
                                 selects.forEach(select => {
                                     const options = Array.from(select.options);
                                     options.forEach(option => {
-                                        option.disabled = selects.some(s => s !== select && s.value === option.value);
+                                        if (selectedValues.includes(option.value) && select.value !== option.value) {
+                                            option.disabled = true;
+                                        } else {
+                                            option.disabled = false;
+                                        }
                                     });
                                 });
-
-                                if (!currentValue) {
-                                    const previousValue = dropdown.dataset.previousValue;
-                                    dropdown.dataset.previousValue = "";
-                                    dropdown.dispatchEvent(new Event('change'));
-                                } else {
-                                    dropdown.dataset.previousValue = currentValue;
-                                }
                             });
 
                             cell.appendChild(dropdown);
