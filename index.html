@@ -32,6 +32,11 @@
             tables.forEach((table, tableIndex) => {
                 const rows = table.querySelectorAll('tr');
                 const headerCells = Array.from(rows[0].querySelectorAll('th'));
+                const columnSelections = {}; // Track selections per column
+
+                headerCells.forEach((header, index) => {
+                    columnSelections[index] = [];
+                });
 
                 rows.forEach((row, rowIndex) => {
                     if (rowIndex === 0) return; // Skip header row
@@ -51,13 +56,27 @@
 
                             // Handle selection and deselection
                             dropdown.addEventListener('change', () => {
-                                const selects = Array.from(table.querySelectorAll('select'));
-                                const selectedValues = selects.map(select => select.value).filter(value => value !== "");
+                                const previousValue = dropdown.dataset.previousValue;
+                                const currentValue = dropdown.value;
 
+                                // Update selections for the column
+                                if (previousValue) {
+                                    const prevIndex = columnSelections[cellIndex].indexOf(previousValue);
+                                    if (prevIndex > -1) {
+                                        columnSelections[cellIndex].splice(prevIndex, 1);
+                                    }
+                                }
+                                if (currentValue) {
+                                    columnSelections[cellIndex].push(currentValue);
+                                }
+                                dropdown.dataset.previousValue = currentValue;
+
+                                // Update dropdown options in the column
+                                const selects = Array.from(table.querySelectorAll(`td:nth-child(${cellIndex + 1}) select`));
                                 selects.forEach(select => {
                                     const options = Array.from(select.options);
                                     options.forEach(option => {
-                                        if (selectedValues.includes(option.value) && select.value !== option.value) {
+                                        if (columnSelections[cellIndex].includes(option.value) && select.value !== option.value) {
                                             option.disabled = true;
                                         } else {
                                             option.disabled = false;
