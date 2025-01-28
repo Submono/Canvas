@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Table for Canvas LMS</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const columnData = {
+                'Workers Club': Array(5).fill('SM58').concat(Array(4).fill('SM57')).concat(Array(6).fill('PG56')).concat(['PG52']).concat(Array(2).fill('PG81')).concat(Array(4).fill('Radial DI')),
+                'Corner Hotel': ['e901'].concat(Array(2).fill('e902')).concat(Array(5).fill('e904')).concat(Array(2).fill('e906')).concat(Array(4).fill('SM57')).concat(Array(10).fill('B58a')).concat(Array(10).fill('B57a')).concat(Array(4).fill('ATM450')).concat(Array(2).fill('SM94')).concat(Array(7).fill('KT DI')),
+                'Evelyn Hotel': Array(5).fill('B58a').concat(Array(4).fill('B57a')).concat(Array(6).fill('PG56')).concat(['PG52']).concat(Array(2).fill('PG81')).concat(Array(4).fill('Radial DI')),
+                'The Tote': Array(4).fill('SM58').concat(Array(2).fill('B57a')).concat(Array(3).fill('e904')).concat(['AKG D112']).concat(Array(2).fill('e914')).concat(['e905']).concat(Array(2).fill('AKG D5')).concat(Array(4).fill('Active DI')).concat(Array(3).fill('Passive DI'))
+            };
+
+            const tables = document.querySelectorAll('table');
+
+            tables.forEach((table, tableIndex) => {
+                const rows = table.querySelectorAll('tr');
+                const headerCells = Array.from(rows[0].querySelectorAll('th'));
+
+                rows.forEach((row, rowIndex) => {
+                    if (rowIndex === 0) return; // Skip header row
+                    const cells = row.querySelectorAll('td');
+
+                    cells.forEach((cell, cellIndex) => {
+                        const columnName = headerCells[cellIndex].textContent;
+                        if (columnData[columnName]) {
+                            const dropdown = document.createElement('select');
+                            dropdown.innerHTML = '<option value="">Select...</option>';
+                            columnData[columnName].forEach(option => {
+                                const opt = document.createElement('option');
+                                opt.value = option;
+                                opt.textContent = option;
+                                dropdown.appendChild(opt);
+                            });
+
+                            // Handle selection and removal
+                            dropdown.addEventListener('change', () => {
+                                const currentValue = dropdown.value;
+                                const selects = Array.from(table.querySelectorAll('select'));
+                                selects.forEach(select => {
+                                    const options = Array.from(select.options);
+                                    options.forEach(option => {
+                                        option.disabled = selects.some(s => s !== select && s.value === option.value);
+                                    });
+                                });
+
+                                if (!currentValue) {
+                                    const previousValue = dropdown.dataset.previousValue;
+                                    dropdown.dataset.previousValue = "";
+                                    dropdown.dispatchEvent(new Event('change'));
+                                } else {
+                                    dropdown.dataset.previousValue = currentValue;
+                                }
+                            });
+
+                            cell.appendChild(dropdown);
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>Interactive Line / Input List</h1>
+    <p>Please select appropriate microphones for each input. Selections cannot be duplicated within a column.</p>
+
+    <table>
+        <tr>
+            <th>Input Source</th>
+            <th>Workers Club</th>
+            <th>Corner Hotel</th>
+            <th>Evelyn Hotel</th>
+            <th>The Tote</th>
+        </tr>
+        <tr>
+            <td>Kick</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Snare Top</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Snare Bottom</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Hi Hats</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Rack Tom</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Floor Tom</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Overhead Left</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Overhead Right</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Bass D.I</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Bass Mic</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Guitar Amp Stage Right</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Guitar Amp Stage Left</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Keyboard</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Trumpet</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Saxophone</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Vocal 1 Stage Right</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Vocal 2 Centre Stage</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Vocal 3 Stage Left</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Vocal 4 Drums</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+</body>
+</html>
