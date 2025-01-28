@@ -17,7 +17,13 @@
         th {
             background-color: #f4f4f4;
         }
+        button {
+            margin-top: 20px;
+            padding: 10px 15px;
+            font-size: 16px;
+        }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const columnData = {
@@ -239,5 +245,20 @@
             <td></td>
         </tr>
     </table>
+
+    <button id="screenshotButton">Download Screenshot</button>
+
+    <script>
+        document.getElementById('screenshotButton').addEventListener('click', () => {
+            const tableElement = document.querySelector('table'); // The table element to capture
+            html2canvas(tableElement).then(canvas => {
+                // Create a downloadable link for the screenshot
+                const link = document.createElement('a');
+                link.download = 'table-screenshot.png';
+                link.href = canvas.toDataURL();
+                link.click();
+            });
+        });
+    </script>
 </body>
 </html>
