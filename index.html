@@ -47,9 +47,9 @@
                         if (columnData[columnName]) {
                             const dropdown = document.createElement('select');
                             dropdown.innerHTML = '<option value="">Select...</option>';
-                            columnData[columnName].forEach(option => {
+                            columnData[columnName].forEach((option, optionIndex) => {
                                 const opt = document.createElement('option');
-                                opt.value = option;
+                                opt.value = `${option}-${optionIndex}`; // Unique value per instance
                                 opt.textContent = option;
                                 dropdown.appendChild(opt);
                             });
@@ -241,4 +241,5 @@
     </table>
 </body>
 </html>
+
 
